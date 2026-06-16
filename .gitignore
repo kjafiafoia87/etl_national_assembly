@@ -1,0 +1,137 @@
+# macOS / system files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+Thumbs.db
+Desktop.ini
+
+# Editors / IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.hypothesis/
+.tox/
+.nox/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Python environments and packaging
+.venv/
+venv/
+env/
+ENV/
+.env
+.env.*
+!.env.example
+!.env.template
+pip-wheel-metadata/
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Jupyter / notebooks
+.ipynb_checkpoints/
+profile_default/
+ipython_config.py
+
+# Logs and local runtime files
+*.log
+logs/
+tmp/
+temp/
+.cache/
+*.tmp
+*.bak
+*.orig
+
+# Local secrets and credentials
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+secrets/
+credentials/
+
+# Databases, dumps, and binary data outputs
+*.db
+*.sqlite
+*.sqlite3
+*.duckdb
+*.dump
+*.parquet
+*.feather
+*.pkl
+*.pickle
+*.joblib
+*.h5
+*.hdf5
+
+# Archives and downloaded source bundles
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.gz
+*.bz2
+*.xz
+*.7z
+*.rar
+
+# ETL data: keep raw/generated datasets out of Git by default.
+# Add curated tiny examples under data/**/fixtures or data/**/samples when needed.
+data/**
+!data/
+!data/**/
+!data/**/.gitkeep
+!data/**/*.md
+!data/**/README*
+!data/**/readme*
+!data/**/fixtures/
+!data/**/fixtures/**
+!data/**/sample/
+!data/**/sample/**
+!data/**/samples/
+!data/**/samples/**
+
+# Local ETL outputs and reports
+output/
+outputs/
+exports/
+tables/
+deputes_boostrap/.sycomore_cache/
+deputes_boostrap/report/*
+!deputes_boostrap/report/
+!deputes_boostrap/report/.gitkeep
+!deputes_boostrap/report/README*
+!deputes_boostrap/report/readme*
+
+# LaTeX build products
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc

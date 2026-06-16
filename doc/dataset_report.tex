@@ -1,0 +1,369 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\renewcommand{\arraystretch}{1.18}
+
+\title{French National Assembly Speech Dataset\\Technical Report}
+\author{Vincent Garrigue}
+\date{June 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This report documents the construction of a unified French National Assembly
+speech dataset covering debates from 1998 to 2026. The final dataset combines a
+historical ParisParl corpus derived from official PDF debate reports with recent
+DILA open-data XML records. It also relies on structured deputy, mandate,
+party, and presidency reference tables in order to bind speeches to stable
+political entities. The target output is an upload-ready speech table with one
+row per speech and the minimal schema expected by the downstream Policorp /
+Kamil structure.
+\end{abstract}
+
+\tableofcontents
+\clearpage
+
+\section{Objective}
+
+The objective of the project is to produce a clean, documented, and
+reproducible dataset of French National Assembly speeches. The final speech
+table must cover the period from 1998 to 2026, keep only speech-level rows, and
+expose a compact schema suitable for downstream analysis and database import:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Column & Description \\
+\midrule
+\texttt{speech\_id} & Sequential speech identifier after chronological sorting. \\
+\texttt{speech\_text} & Cleaned speech text. \\
+\texttt{speech\_interjection} & Attached parliamentary reaction or interjection, when available. \\
+\texttt{speech\_date} & Speech date in \texttt{DD-MM-YYYY} format. \\
+\texttt{speaker\_id} & Deputy identifier or presidency identifier. \\
+\texttt{country\_id} & Country reference, fixed to \texttt{3} for France. \\
+\texttt{term} & French legislature number at the speech date. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The final dataframe is named \texttt{df\_1998\_2026} in the exploratory
+notebook and is exported to \path{data/final/speeches_1998_2026.csv}.
+
+\section{Dataset Inventory}
+
+The local repository contains raw sources, intermediate transformed files, and
+final analysis-ready tables. Table~\ref{tab:inventory} reports the principal
+CSV outputs documented in \path{dataset.md}. Counts are based on local file
+line counts, excluding the header row.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{p{0.50\linewidth}r p{0.26\linewidth}}
+\toprule
+Local file & Records & Role \\
+\midrule
+\path{data/final/speeches_1998_2026.csv} & 5,557,923 & Final unified speech table. \\
+\path{data/final/parisparl_speeches_1998_2010_processed.csv} & 1,424,597 & Historical ParisParl input for the final merge. \\
+\path{data/final/parisparl_speeches_1998_2019_processed.csv} & 2,386,200 & Extended processed ParisParl output. \\
+\path{data/speech/2011_2026/centralized_speeches.csv} & 3,084,895 & Centralized DILA XML-derived speech table. \\
+\path{data/final/politician.csv} & 3,645 & Deputy reference table. \\
+\path{data/final/mandate.csv} & 5,193 & Mandate reference table. \\
+\path{data/parties/party.csv} & 41 & Party reference table. \\
+\path{data/final/presidency.csv} & 9 & Presidency reference table. \\
+\bottomrule
+\end{tabular}
+\caption{Main local dataset files.}
+\label{tab:inventory}
+\end{table}
+
+\section{Primary Speech Sources}
+
+\subsection{DILA Open Data, 2011--2026}
+
+The recent speech corpus is built from the DILA open-data archive:
+\url{https://echanges.dila.gouv.fr/OPENDATA/Debats/AN/}. DILA is the French
+government directorate responsible for legal and administrative information.
+For recent French National Assembly debates, this is the preferred source
+because it provides the original parliamentary XML structure published by the
+administration.
+
+The local DILA pipeline has three reproducible stages:
+
+\begin{enumerate}
+  \item \textbf{Download and extraction.} \path{converter/download_dila_debats.py}
+  reads the DILA index, detects yearly archives, downloads the requested years,
+  and extracts XML files into \path{data/speech/2011_2026/raw}. The extraction
+  keeps the year/session directory structure and protects against unsafe archive
+  paths.
+
+  \item \textbf{XML conversion.} \path{converter/convert.py} parses each
+  \texttt{CRI\_*.xml} debate file and writes structured JSON documents under
+  \path{data/speech/2011_2026/converted}. The parser preserves the paired
+  \texttt{AAA\_*.xml} source name when present and extracts session metadata,
+  paragraph identifiers, speaker blocks, speaker links, speaker roles, and the
+  nested debate hierarchy.
+
+  \item \textbf{CSV centralization.} \path{converter/json_to_csv.py} flattens
+  converted JSON files into \path{data/speech/2011_2026/centralized_speeches.csv}.
+  The result contains one row per paragraph and includes raw text, cleaned text,
+  topic hierarchy, speaker metadata, interjections, quotes, and session numbers.
+\end{enumerate}
+
+The DILA cleaning stage is required because the XML source is parliamentary
+markup rather than an analysis-ready table. Paragraphs may include nested
+speaker tags, non-breaking spaces, repeated whitespace, procedural titles,
+interruptions, and section headers mixed with spoken content. The converter
+therefore stores both raw paragraph text and normalized paragraph text, while
+separating speaker metadata from the speech content.
+
+\subsection{ParisParl, 1998--2010 for the Final Merge}
+
+The historical speech corpus is based on the ParisParl corpus:
+\url{https://zenodo.org/records/3819374}. ParisParl was produced in the
+PolMine project from official PDF reports of plenary sessions in the French
+National Assembly. It is used to extend the speech coverage before the DILA XML
+period.
+
+The original tabular version was no longer available, but the encoded Corpus
+Workbench version was recovered and reversed into yearly CSV files stored under:
+
+\begin{center}
+\path{data/speech/1996_2019/parisparl_reden_YYYY.csv}
+\end{center}
+
+Although the source description covers 1996 to 2019, the local processed files
+currently start in 1998. The first two years are documented as missing in the
+data quality review.
+
+Cleaning ParisParl is more complex than cleaning DILA because the source is
+PDF-derived rather than native structured XML. The extracted text stream mixes
+OCR and detokenization artifacts, page-layout noise, table-of-contents lines,
+procedural headings, major topics, subtopics, speeches, and interjections.
+Numeric strings can represent article numbers or page references rather than
+topic numbers, and presidency or procedure rows can be incorrectly interpreted
+as speeches if they are not separated.
+
+The main ParisParl restructuring components are:
+
+\begin{itemize}
+  \item \path{mine_parisparl.py} and \path{eda/mine_parisparl.ipynb}, used to
+  prototype and apply structure recovery rules.
+  \item \path{eda/summary_extraction.py}, which extracts the official
+  \texttt{SOMMAIRE} zone and uses it as the preferred source for topic order,
+  major topics, and subtopics.
+  \item \path{eda/title_cleaning.py}, which fixes French detokenization
+  artifacts in parliamentary titles.
+  \item \path{eda/interjection_filter.py}, which keeps genuine reactions such
+  as applause, laughter, protests, and interruptions while filtering structural
+  false positives.
+  \item \path{eda/speech_grouping.py}, which groups consecutive rows from the
+  same speaker, keeps procedure rows separate, and attaches reaction
+  interjections to the relevant speech group.
+  \item \path{eda/entity_binding.py}, which links cleaned speeches to party and
+  politician references.
+\end{itemize}
+
+\section{Reference Entity Tables}
+
+\subsection{Deputies and Mandates}
+
+The deputy and mandate tables provide stable political entities for both speech
+corpora. Speeches need deputy identifiers, mandate periods, legislature numbers,
+and party or group information so that each row can be linked to a person, a
+parliamentary term, and a political family.
+
+The primary structured source is the official Assemblee nationale historical
+deputy archive:
+\url{https://data.assemblee-nationale.fr/acteurs/historique-des-deputes}.
+Local JSON files are stored in:
+
+\begin{itemize}
+  \item \path{data/deputes/acteur}
+  \item \path{data/deputes/organe}
+  \item \path{data/deputes/deport}
+\end{itemize}
+
+The conversion is implemented in \path{convert_acteurs_to_csv.py}. It extracts
+one politician row per \texttt{PA...} identifier and one mandate row per
+\texttt{mp\_id + legislature}. The script also extracts birth information,
+profession, institutional status, constituency, mandate dates, election dates,
+parliamentary groups, committee memberships, source URLs, and a country
+reference.
+
+The Sycomore website is used as a complementary source for legislatures 10 to
+17: \url{https://www2.assemblee-nationale.fr/sycomore/recherche}. It fills
+missing politicians and mandates, especially for older legislatures where the
+local structured JSON data can be incomplete.
+
+The merge rules are conservative:
+
+\begin{itemize}
+  \item official local Assemblee nationale JSON rows take priority over
+  Sycomore rows;
+  \item politicians are deduplicated by \texttt{mp\_id};
+  \item mandates are deduplicated by \texttt{mp\_id + term};
+  \item existing \texttt{PA...} identifiers are preserved;
+  \item generated fallback identifiers are recorded in audit reports;
+  \item each mandate must point to an existing politician.
+\end{itemize}
+
+\subsection{Political Parties}
+
+\path{data/parties/party.csv} is a manually curated reference table used to
+standardize party and parliamentary group labels across deputy, mandate, and
+speech datasets. It maps unstable historical labels, acronyms, group names, and
+aliases to stable internal party identifiers.
+
+This table is used by \path{convert_acteurs_to_csv.py} when converting mandate
+group labels to \texttt{party\_id} values and by \path{eda/entity_binding.py}
+when binding speech rows to parties. Labels are normalized before matching:
+case, accents, punctuation, parenthetical details, and known historical variants
+are handled.
+
+Rows that cannot be mapped safely are not guessed. In the deputy pipeline, they
+are emitted as empty or \texttt{P000} values and written to
+\path{deputes_boostrap/report/unresolved_party_ids.csv} for manual review.
+
+\subsection{Presidency}
+
+\path{data/final/presidency.csv} is used to bind speeches spoken by the chair
+of the Assembly when no deputy identifier is available. During the final merge,
+rows identified as presidency speeches are matched to a presidency identifier
+according to the speech date.
+
+\section{Final Merge for the 1998--2026 Speech Table}
+
+The final upload-ready speech table combines:
+
+\begin{itemize}
+  \item \path{data/final/parisparl_speeches_1998_2010_processed.csv}, for
+  historical ParisParl speeches from 1998 to 2010;
+  \item \path{data/speech/2011_2026/centralized_speeches.csv}, for DILA
+  open-data debates from 2011 to 2026;
+  \item \path{data/final/presidency.csv}, for presidency identifier binding.
+\end{itemize}
+
+The merge logic follows these steps:
+
+\begin{enumerate}
+  \item Reduce DILA rows to the columns needed by the final schema:
+  date, cleaned text, deputy identifier, speaker label, and interjection.
+  \item Drop rows without a speaker, except presidency rows that can be bound
+  later through the presidency table.
+  \item Rename DILA columns to the final naming convention.
+  \item Recover missing DILA dates from source file names when possible.
+  \item Read the processed ParisParl table and restrict it to 1998--2010.
+  \item Keep only ParisParl rows with \texttt{row\_type == "speech"}.
+  \item Rename ParisParl columns to the final naming convention.
+  \item Concatenate the normalized ParisParl and DILA speech tables in
+  chronological order while preserving source order within each corpus.
+  \item Fill missing presidency speaker identifiers from \path{presidency.csv}
+  when the row is spoken by the Assembly presidency.
+  \item Set \texttt{country\_id = 3} for France.
+  \item Compute \texttt{term} from the speech date using the French legislature
+  date ranges from the 11th to the 17th legislature.
+  \item Generate \texttt{speech\_id} after sorting, starting at 1.
+  \item Remove temporary role, parsed-date, and source-order columns.
+\end{enumerate}
+
+\section{Quality Assurance}
+
+The project includes targeted tests under \path{tests/} and notebook-level
+quality checks for the final merged table. The final notebook asserts that:
+
+\begin{itemize}
+  \item final columns match the expected schema and order;
+  \item \texttt{speech\_id} is unique and monotonically increasing;
+  \item \texttt{speech\_date} is never missing;
+  \item \texttt{speaker\_id} is never empty after presidency binding;
+  \item \texttt{country\_id} is always \texttt{3};
+  \item \texttt{term} is never missing.
+\end{itemize}
+
+Rows that still have no speaker identifier after presidency binding are removed
+from the upload dataframe because the target structure requires a bound speaker.
+
+The deputy pipeline also writes audit reports under
+\path{deputes_boostrap/report}, including new politicians, new mandates,
+fallback identifiers, duplicates, and unresolved party identifiers.
+
+\section{Known Limitations}
+
+\begin{itemize}
+  \item The ParisParl source is documented as covering 1996--2019, but the
+  local processed files currently start in 1998. The first two years remain a
+  known coverage gap.
+  \item ParisParl is reconstructed from PDF-derived text. Even after cleaning,
+  it is more exposed to OCR artifacts, layout noise, and false structural
+  positives than the DILA XML source.
+  \item Some fields in the politician target schema are intentionally empty
+  because they are not available in the local source JSON files:
+  \texttt{education\_level}, \texttt{school}, \texttt{academic\_title},
+  \texttt{languages}, \texttt{list}, and \texttt{votes}.
+  \item Party labels are historically unstable. The curated party table reduces
+  this problem, but unresolved labels are kept for manual review instead of
+  being guessed automatically.
+  \item The final table keeps the compact Kamil structure. Richer source
+  metadata such as detailed topic hierarchy, raw paragraph identifiers, and
+  source filenames remains available in intermediate files rather than in the
+  final upload table.
+\end{itemize}
+
+\section{Reproducibility}
+
+The DILA pipeline can be run with:
+
+\begin{verbatim}
+python3 main.py download --years 2011-2026
+python3 main.py convert
+python3 main.py csv
+\end{verbatim}
+
+The full DILA pipeline can also be run with:
+
+\begin{verbatim}
+python3 main.py all --years 2011-2026
+\end{verbatim}
+
+The deputy and mandate pipeline can be run with:
+
+\begin{verbatim}
+python3 convert_acteurs_to_csv.py
+\end{verbatim}
+
+Useful checks for the deputy conversion include:
+
+\begin{verbatim}
+python3 convert_acteurs_to_csv.py --local-only --dry-run
+python3 -m py_compile convert_acteurs_to_csv.py
+\end{verbatim}
+
+\section{Recommended Next Steps}
+
+\begin{enumerate}
+  \item Finalize the documentation review with the intended dataset consumers.
+  \item Verify the 1996--1997 ParisParl coverage gap and decide whether the
+  final public scope should be declared as 1998--2026.
+  \item Review unresolved party mappings and fallback deputy identifiers before
+  database publication.
+  \item Keep the compact upload table stable, but preserve intermediate files
+  for analyses requiring topic hierarchy, source order, raw text, or source
+  filenames.
+  \item Run the full test suite before pushing the final tables to the target
+  database or VM.
+\end{enumerate}
+
+\end{document}
