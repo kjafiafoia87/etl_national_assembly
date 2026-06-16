@@ -1,0 +1,42 @@
+party_id,acronym,name,mandates,source_political_group_count,source_political_groups,interjection_mentions,interjection_aliases,wiki_url,country_id
+P001,SER,"Socialiste, écologiste et républicain",238,1,"['Socialiste, écologiste et républicain']",3152,"['socialiste, écologiste et républicain']",https://fr.wikipedia.org/wiki/Groupe_socialiste_(Assemblee_nationale),3
+P002,LR,Les Républicains,203,1,['Les Républicains'],30304,"['LR', 'Les Républicains']",https://fr.wikipedia.org/wiki/Les_Republicains,3
+P003,LaREM,La République en Marche,173,1,['La République en Marche'],36908,"['LaREM', 'REM']",https://fr.wikipedia.org/wiki/La_Republique_en_marche,3
+P004,UMP,Union pour un Mouvement Populaire,146,2,"['Apparenté Union pour un Mouvement Populaire', 'Union pour un Mouvement Populaire']",20499,['UMP'],https://fr.wikipedia.org/wiki/Union_pour_un_mouvement_populaire,3
+P005,RN,Rassemblement National,131,1,['Rassemblement National'],18857,"['RN', 'Rassemblement national']",https://fr.wikipedia.org/wiki/Rassemblement_national,3
+P006,EPR,Ensemble pour la République,107,1,['Ensemble pour la République'],6535,['EPR'],https://fr.wikipedia.org/wiki/Ensemble_pour_la_Republique,3
+P007,RE,Renaissance,88,1,['Renaissance'],15936,['RE'],https://fr.wikipedia.org/wiki/Renaissance_(parti),3
+P008,SOC,Socialistes et apparentés,88,1,['Socialistes et apparentés'],17919,['SOC'],https://fr.wikipedia.org/wiki/Groupe_socialistes_et_apparentes,3
+P009,LFI-NFP,La France insoumise - Nouveau Front Populaire,71,1,['La France insoumise - Nouveau Front Populaire'],0,[],https://fr.wikipedia.org/wiki/Nouveau_Front_populaire,3
+P010,NI,Non inscrit,69,2,"[""Députés n'appartenant à aucun groupe"", 'Non inscrit']",1072,['non inscrits'],https://fr.wikipedia.org/wiki/Non-inscrits_a_l%27Assemblee_nationale,3
+P011,DR,Droite Républicaine,59,1,['Droite Républicaine'],4079,['DR'],https://fr.wikipedia.org/wiki/Groupe_Droite_republicaine,3
+P012,DEM,Les Démocrates,58,2,"['Démocrate (MoDem et Indépendants)', 'Les Démocrates']",17026,['Dem'],https://fr.wikipedia.org/wiki/Les_Democrates_(France),3
+P013,HOR,Horizons et apparentés,50,2,"['Horizons & Indépendants', 'Horizons et apparentés']",6471,['HOR'],https://fr.wikipedia.org/wiki/Horizons_(parti),3
+P014,GDR,Gauche démocrate et républicaine,43,3,"['Gauche Démocrate et Républicaine', 'Gauche démocrate et républicaine', 'Président du groupe Gauche démocrate et républicaine']",20591,['GDR'],https://fr.wikipedia.org/wiki/Groupe_de_la_Gauche_democrate_et_republicaine,3
+P015,SRC-DVG,"Socialiste, radical, citoyen et divers gauche",43,2,"['Apparenté Socialiste, radical, citoyen et divers gauche', 'Socialiste, radical, citoyen et divers gauche']",0,[],https://fr.wikipedia.org/wiki/Groupe_socialiste_(Assemblee_nationale),3
+P016,EcoS,Écologiste et Social,38,1,['Écologiste et Social'],7522,['EcoS'],https://fr.wikipedia.org/wiki/Groupe_ecologiste_(Assemblee_nationale),3
+P017,LIOT,"Libertés, Indépendants, Outre-mer et Territoires",32,1,"['Libertés, Indépendants, Outre-mer et Territoires']",1984,['LIOT'],"https://fr.wikipedia.org/wiki/Groupe_Libertes,_independants,_outre-mer_et_territoires",3
+P018,SRC,"Socialiste, républicain et citoyen",31,1,"['Socialiste, républicain et citoyen']",27001,"['SRC', 'socialiste, républicain et citoyen']",https://fr.wikipedia.org/wiki/Groupe_socialiste_(Assemblee_nationale),3
+P019,MODEM,Mouvement Démocrate,27,2,"['Mouvement Démocrate (MoDem) et Démocrates apparentés', 'Mouvement Démocrate et apparentés']",11532,['MODEM'],https://fr.wikipedia.org/wiki/Mouvement_democrate_(France),3
+P020,UDI,Union des démocrates et indépendants,23,2,"['UDI et Indépendants', 'Union des démocrates et indépendants']",7258,['UDI'],https://fr.wikipedia.org/wiki/Union_des_democrates_et_independants,3
+P021,UDR,Union des droites pour la République,16,1,['Union des droites pour la République'],3966,['UDR'],https://fr.wikipedia.org/wiki/Union_des_droites_pour_la_Republique,3
+P022,LFI-NUPES,La France insoumise - Nouvelle Union populaire écologique et sociale,15,1,['La France insoumise - Nouvelle Union Populaire écologique et sociale'],0,[],https://fr.wikipedia.org/wiki/Nouvelle_Union_populaire_ecologique_et_sociale,3
+P023,NC,Nouveau Centre,14,2,"['Nouveau Centre', 'Président du groupe Nouveau Centre']",790,['NC'],https://fr.wikipedia.org/wiki/Les_Centristes,3
+P024,AGIR-ENS,Agir ensemble,13,1,['Agir ensemble'],1787,['Agir ens'],https://fr.wikipedia.org/wiki/Groupe_Agir_ensemble,3
+P025,LT,Libertés et Territoires,11,1,['Libertés et Territoires'],2160,['LT'],https://fr.wikipedia.org/wiki/Groupe_Libertes_et_territoires,3
+P026,RRDP,"Radical, républicain, démocrate et progressiste",11,1,"['Radical, républicain, démocrate et progressiste']",5010,"['RRDP', 'radical, républicain, démocrate et progressiste']","https://fr.wikipedia.org/wiki/Groupe_radical,_republicain,_democrate_et_progressiste",3
+P027,GDR-NUPES,Gauche démocrate et républicaine - NUPES,8,1,['Gauche démocrate et républicaine - NUPES'],0,[],https://fr.wikipedia.org/wiki/Groupe_de_la_Gauche_democrate_et_republicaine,3
+P028,LFI,La France insoumise,4,1,['La France insoumise'],47314,"['FI', 'LFI']",https://fr.wikipedia.org/wiki/La_France_insoumise,3
+P029,UAI,"UDI, Agir et Indépendants",2,1,"['UDI, Agir et Indépendants']",302,['UAI'],"https://fr.wikipedia.org/wiki/Groupe_UDI,_Agir_et_independants",3
+P030,ECOLO-NUPES,Écologiste - NUPES,1,1,['Écologiste - NUPES'],0,[],https://fr.wikipedia.org/wiki/Groupe_ecologiste_(Assemblee_nationale),3
+P031,NG,Nouvelle Gauche,1,1,['Nouvelle Gauche'],2097,['NG'],https://fr.wikipedia.org/wiki/Groupe_Nouvelle_Gauche,3
+P032,Agir,Agir,0,0,[],4353,['Agir'],https://fr.wikipedia.org/wiki/Agir_(parti_politique),3
+P033,EDS,Écologie démocratie solidarité,0,0,[],356,['EDS'],https://fr.wikipedia.org/wiki/Groupe_Ecologie_democratie_solidarite,3
+P034,LC,Libertés et territoires,0,0,[],769,['LC'],https://fr.wikipedia.org/wiki/Groupe_Libertes_et_territoires,3
+P035,NFP,Nouveau Front populaire,0,0,[],14169,['NFP'],https://fr.wikipedia.org/wiki/Nouveau_Front_populaire,3
+P036,NUPES,Nouvelle Union populaire écologique et sociale,0,0,[],24039,['NUPES'],https://fr.wikipedia.org/wiki/Nouvelle_Union_populaire_ecologique_et_sociale,3
+P037,Écolo,Écologiste,0,0,[],18054,"['Écolo', 'écologiste']",https://fr.wikipedia.org/wiki/Parti_%C3%A9cologiste,3
+P038,R-UMP,Rassemblement - Union pour un Mouvement Populaire,1,1,"['Rassemblement - Union pour un Mouvement Populaire']",0,['R-UMP'],https://fr.wikipedia.org/wiki/Groupe_Rassemblement-Union_pour_un_mouvement_populaire,3
+P039,UDF,Union pour la Démocratie Française,29,1,"['Union pour la Démocratie Française']",0,['UDF'],https://fr.wikipedia.org/wiki/Union_pour_la_démocratie_française,3
+P040,DL,Démocratie libérale,29,1,"['Démocratie libérale']",0,['DL'],https://fr.wikipedia.org/wiki/D%C3%A9mocratie_lib%C3%A9rale_(parti_politique),3
+P000,UNK,Non renseigné,4,0,[],0,[],https://fr.wikipedia.org/wiki/Assemblée_nationale_(France),3

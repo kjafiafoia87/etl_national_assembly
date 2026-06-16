@@ -109,6 +109,13 @@ data/**
 !data/**/sample/**
 !data/**/samples/
 !data/**/samples/**
+!data/final/
+!data/final/**
+data/final/kamil/speeches_1998_2026.csv
+data/final/parisparl_speeches_1998_2010_processed.csv
+data/final/parisparl_speeches_1998_2019_processed.csv
+data/final/speech.csv
+data/final/speeches_1998_2026.csv
 
 # Local ETL outputs and reports
 output/
